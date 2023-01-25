@@ -9,7 +9,6 @@ async function signup(req, res) {
     } else if (!process.env.SECRET) {
       throw new Error('no SECRET in .env file')
     } else {
-      console.log(req.body);
       const user = await User.create(req.body)
       req.body.userId = user.id
       await Profile.create(req.body)
@@ -31,10 +30,8 @@ async function signup(req, res) {
 async function login(req, res) {
   try {
     const user = await User.findOne({ where: { email: req.body.email } })
-    console.log(user, "USER");
     if (!user) return res.status(401).json({ err: 'User not found' })
     user.comparePassword(req.body.pw, (err, isMatch) => {
-      console.log("THIS IS RUNNING");
       if (isMatch) {
         const token = createJWT(user)
         res.json({ token })

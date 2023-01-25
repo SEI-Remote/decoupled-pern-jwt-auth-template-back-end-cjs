@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     comparePassword(tryPassword, cb) {
-      console.log("THIS RUNS");
-      console.log(this, "THIS");
       bcrypt.compare(tryPassword, this.dataValues.password, cb)
     }
   }
@@ -55,14 +53,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.beforeSave(async (user, options) => {
-    console.log(user, "USER");
-    console.log(user.changed('password'), "USER CHANGED PASSWORD");
-    console.log(user.password(), "USER.PASSWORD");
-    console.log();
     if (!user.changed('password')) return
     try {
       const hash = await bcrypt.hash(user.dataValues.password, SALT_ROUNDS)
-      console.log(hash, "HASH");
       user.password = hash
     } catch (error) {
       console.error(error);
