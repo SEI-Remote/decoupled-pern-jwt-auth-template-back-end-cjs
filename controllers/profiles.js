@@ -14,13 +14,13 @@ async function index(req, res) {
 async function addPhoto(req, res) {
   try {
     const imageFile = req.files.photo.path
-    const profile = Profile.findByPk(req.params.id)
+    const profile = await Profile.findByPk(req.params.id)
     const image = await cloudinary.uploader.upload(
       imageFile, {tags: `${req.user.email}`}
     )
     profile.photo = image.url
-    res.status(201).json(profile.photo)
     await profile.save()
+    res.status(201).json(profile.photo)
   } catch (error) {
     console.log(error)
     res.status(500).json({err: error})
