@@ -47,7 +47,8 @@ async function login(req, res) {
 }
 
 async function changePassword(req, res) {
-  const user = await User.findById(req.user._id)
+  console.log(req.user);
+  const user = await User.findByPk(req.user.id)
   if (!user) return res.status(401).json({ err: 'User not found' })
   user.comparePassword(req.body.pw, async (err, isMatch) => {
     if (isMatch) {
