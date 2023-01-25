@@ -17,12 +17,13 @@ async function signup(req, res) {
       res.status(200).json({ token })
     }
   } catch (error) {
-    console.log(error);
     if (req.body.profile) {
       Profile.findByIdAndDelete(req.body.profile)
       res.status(500).json({ err: error.errmsg })
+    } else if (error.message) {
+      res.status(500).json({ err: error.message })
     } else {
-      res.status(500).json(error)
+      res.status(500).json({ err: error })
     }
   }
 }
