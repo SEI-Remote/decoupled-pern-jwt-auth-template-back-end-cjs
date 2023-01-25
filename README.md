@@ -1,8 +1,8 @@
-# Decoupled MERN Stack with JWT Auth Template - Back End
+# Decoupled PERN Stack with JWT Auth Template - Back End
 
-This is the back end of a decoupled MERN Stack app that includes JWT Authentication.
+This is the back end of a decoupled PERN Stack app that includes JWT Authentication.
 
-When combined with the front end found [here](https://github.com/SEI-Remote/decoupled-mern-jwt-auth-template-front-end), you'll have all you need to build a full stack MERN app!
+When combined with the front end found [here](https://github.com/SEI-Remote/decoupled-pern-jwt-auth-template-front-end), you'll have all you need to build a full stack PERN app!
 
 Use this to go build things! 🚀
 
@@ -11,7 +11,7 @@ Use this to go build things! 🚀
 **Replace `<name-of-your-app-here>` in the commands below with the name of your app!**
 
 ```bash
-git clone https://github.com/SEI-Remote/decoupled-mern-jwt-auth-template-back-end <name-of-your-app-here>-back-end
+git clone https://github.com/SEI-Remote/decoupled-pern-jwt-auth-template-back-end-cjs <name-of-your-app-here>-back-end
 cd <name-of-your-app-here>-back-end
 code .
 ```
@@ -61,6 +61,12 @@ CLOUDINARY_URL=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Replace the `DATABASE_URL`, `SECRET`, and `CLOUDINARY_URL` with values that you provide.
 
 > 🚨 Place secrets in this `.env` file. The contents of this file WILL NOT be exposed to site visitors.
+
+Make your first migration to create the built-in User and Profile tables in your database:
+
+```bash
+sequelize-cli db:migrate
+```
 
 Delete this README.md, then make an initial commit:
 
