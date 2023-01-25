@@ -1,32 +1,30 @@
-// const Profile = require('../models/profile.js').Profile
-// const cloudinary = require('cloudinary').v2
+const { Profile } = require('../models')
+const cloudinary = require('cloudinary').v2
 
-// function index(req, res) {
-//   Profile.find({})
-//   .then(profiles => res.json(profiles))
-//   .catch(err => {
-//     console.log(err)
-//     res.status(500).json(err)
-//   })
-// }
+async function index(req, res) {
+  try {
+    const profiles = await Profile.findAll()
+    res.json(profiles)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({err: error})
+  }
+}
 
-// function addPhoto(req, res) {
-//   const imageFile = req.files.photo.path
-//   Profile.findById(req.params.id)
-//   .then(profile => {
-//     cloudinary.uploader.upload(imageFile, {tags: `${req.user.email}`})
-//     .then(image => {
-//       profile.photo = image.url
-//       profile.save()
-//       .then(profile => {
-//         res.status(201).json(profile.photo)
-//       })
-//     })
-//     .catch(err => {
-//       console.log(err)
-//       res.status(500).json(err)
-//     })
-//   })
-// }
+async function addPhoto(req, res) {
+  try {
+    const imageFile = req.files.photo.path
+    const profile = Profile.findByPk(req.params.id)
+    const image = await cloudinary.uploader.upload(
+      imageFile, {tags: `${req.user.email}`}
+    )
+    profile.photo = image.url
+    res.status(201).json(profile.photo)
+    await profile.save()
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({err: error})
+  }
+}
 
-// module.exports = { index, addPhoto }
+module.exports = { index, addPhoto }
