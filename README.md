@@ -76,4 +76,10 @@ git commit -m "initial commit"
 git push origin main
 ```
 
+Start the app with:
+
+```bash
+nodemon
+```
+
 You're done!
