@@ -68,18 +68,18 @@ Make your first migration to create the built-in User and Profile tables in your
 sequelize-cli db:migrate
 ```
 
+Confirm the app starts up with:
+
+```bash
+nodemon
+```
+
 Delete this README.md, then make an initial commit:
 
 ```bash
 git add .
 git commit -m "initial commit"
 git push origin main
-```
-
-Start the app with:
-
-```bash
-nodemon
 ```
 
 You're done!
