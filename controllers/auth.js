@@ -12,11 +12,12 @@ async function signup(req, res) {
       const user = await User.create(req.body)
       req.body.userId = user.id
       const profile = await Profile.create(req.body)
-      user.dataValues.profile = profile.dataValues
+      user.dataValues.profile = { id: profile.dataValues.id }
       const token = createJWT(user)
       res.status(200).json({ token })
     }
   } catch (error) {
+    console.log(error);
     if (req.body.profile) {
       Profile.findByIdAndDelete(req.body.profile)
       res.status(500).json({ err: error.errmsg })
@@ -30,7 +31,10 @@ async function signup(req, res) {
 
 async function login(req, res) {
   try {
-    const user = await User.findOne({ where: { email: req.body.email } })
+    const user = await User.findOne({ 
+      where: { email: req.body.email },
+      include: { model: Profile, as: "profile", attributes: [ "id" ] }
+    })
     if (!user) return res.status(401).json({ err: 'User not found' })
     user.comparePassword(req.body.pw, (err, isMatch) => {
       if (isMatch) {
@@ -41,24 +45,29 @@ async function login(req, res) {
       }
     })
   } catch (error) {
+    console.log(error);
     res.status(500).json({ err: error })
   }
 }
 
 async function changePassword(req, res) {
-  console.log(req.user);
-  const user = await User.findByPk(req.user.id)
-  if (!user) return res.status(401).json({ err: 'User not found' })
-  user.comparePassword(req.body.pw, async (err, isMatch) => {
-    if (isMatch) {
-      user.password = req.body.newPw
-      await user.save()
-      const token = createJWT(user)
-      res.json({ token })
-    } else {
-      res.status(401).json({ err: 'Incorrect password' })
-    }
-  })
+  try {
+    const user = await User.findByPk(req.user.id)
+    if (!user) return res.status(401).json({ err: 'User not found' })
+    user.comparePassword(req.body.pw, async (err, isMatch) => {
+      if (isMatch) {
+        user.password = req.body.newPw
+        await user.save()
+        const token = createJWT(user)
+        res.json({ token })
+      } else {
+        res.status(401).json({ err: 'Incorrect password' })
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ err: error })
+  }
 }
 
 // /* --== Helper Functions ==-- */
