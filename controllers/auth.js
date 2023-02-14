@@ -18,12 +18,12 @@ async function signup(req, res) {
     }
   } catch (error) {
     console.log(error);
-    if(req.body.userId) User.destroy({ where: { id: req.body.userId } })
-    if (error.message) {
-      res.status(500).json({ err: error.message })
-    } else {
-      res.status(500).json({ err: error })
+    try {
+      if(req.body.userId) await User.destroy({ where: { id: req.body.userId } })
+    } catch (error) {
+      return res.status(500).json({ err: error.message })
     }
+    res.status(500).json({ err: error.message })
   }
 }
 
