@@ -34,7 +34,7 @@ async function login(req, res) {
       include: { model: Profile, as: "profile", attributes: [ "id" ] }
     })
     if (!user) return res.status(401).json({ err: 'User not found' })
-    user.comparePassword(req.body.pw, (err, isMatch) => {
+    user.comparePassword(req.body.password, (err, isMatch) => {
       if (isMatch) {
         const token = createJWT(user)
         res.json({ token })
@@ -52,9 +52,9 @@ async function changePassword(req, res) {
   try {
     const user = await User.findByPk(req.user.id)
     if (!user) return res.status(401).json({ err: 'User not found' })
-    user.comparePassword(req.body.pw, async (err, isMatch) => {
+    user.comparePassword(req.body.oldPassword, async (err, isMatch) => {
       if (isMatch) {
-        user.password = req.body.newPw
+        user.password = req.body.newPassword
         await user.save()
         const token = createJWT(user)
         res.json({ token })
