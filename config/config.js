@@ -4,18 +4,18 @@ const options = { ssl: { rejectUnauthorized: false, require: true } }
 
 module.exports = {
   development: {
-    dialect: "postgres",
+    dialect: 'postgres',
     dialectOptions: options,
-    use_env_variable: "DATABASE_URL",
+    use_env_variable: 'DATABASE_URL',
   },
   test: {
-    dialect: "postgres",
+    dialect: 'postgres',
     dialectOptions: options,
-    use_env_variable: "DATABASE_URL",
+    use_env_variable: 'DATABASE_URL',
   },
   production: {
-    dialect: "postgres",
+    dialect: 'postgres',
     dialectOptions: options,
-    use_env_variable: "DATABASE_URL",
-  }
+    use_env_variable: 'DATABASE_URL',
+  },
 }
