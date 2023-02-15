@@ -17,9 +17,11 @@ async function signup(req, res) {
       res.status(200).json({ token })
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     try {
-      if(req.body.userId) await User.destroy({ where: { id: req.body.userId } })
+      if (req.body.userId) {
+        await User.destroy({ where: { id: req.body.userId } })
+      }
     } catch (error) {
       return res.status(500).json({ err: error.message })
     }
@@ -29,9 +31,9 @@ async function signup(req, res) {
 
 async function login(req, res) {
   try {
-    const user = await User.findOne({ 
+    const user = await User.findOne({
       where: { email: req.body.email },
-      include: { model: Profile, as: "profile", attributes: [ "id" ] }
+      include: { model: Profile, as: 'profile', attributes: ['id'] },
     })
     if (!user) return res.status(401).json({ err: 'User not found' })
     user.comparePassword(req.body.password, (err, isMatch) => {
@@ -43,7 +45,7 @@ async function login(req, res) {
       }
     })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).json({ err: error })
   }
 }
@@ -63,7 +65,7 @@ async function changePassword(req, res) {
       }
     })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).json({ err: error })
   }
 }

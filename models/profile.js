@@ -1,7 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
   class Profile extends Model {
     /**
@@ -13,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Profile.belongsTo(models.User, { foreignKey: 'userId' })
     }
   }
-  
+
   Profile.init({
     name: {
       type: DataTypes.STRING,
@@ -29,9 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-  }, {
+  },
+  {
     sequelize,
     modelName: 'Profile',
-  });
-  return Profile;
-};
+  })
+  return Profile
+}
