@@ -4,10 +4,10 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Users', {
       id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
       },
       name: {
         type: Sequelize.STRING,
@@ -16,29 +16,19 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: {
-          msg: 'This email is already taken'
-        },
-        validate: {
-          notNull: {
-            msg: 'An email is required'
-          },
-          isEmail: {
-            msg: 'Please provide an email address'
-          },
-        }
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
       },
       updatedAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },
