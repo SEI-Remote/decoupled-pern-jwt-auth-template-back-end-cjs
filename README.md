@@ -2,7 +2,7 @@
 
 This is the back end of a decoupled PERN Stack app that includes JWT Authentication.
 
-When combined with the front end found [here](https://github.com/SEI-Remote/decoupled-pern-jwt-auth-template-front-end), you'll have all you need to build a full stack PERN app!
+When combined with the front end found [here](https://github.com/SEI-Remote/decoupled-pern-jwt-auth-template-front-end-ts), you'll have all you need to build a full stack PERN app!
 
 Use this to go build things! 🚀
 
