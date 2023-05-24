@@ -8,7 +8,7 @@ Use this to go build things! 🚀
 
 ## To Use This Template
 
-**Replace `<name-of-your-app-here>` in the commands below with the name of your app!**
+**Replace `<name-of-your-app-here>` (including the `<` and `>`) in the commands below with the name of your app!**
 
 ```bash
 git clone https://github.com/SEI-Remote/decoupled-pern-jwt-auth-template-back-end-cjs <name-of-your-app-here>-back-end
@@ -32,19 +32,19 @@ Re-initialize a git repository:
 git init
 ```
 
-Create a repo for this project on GitHub and add that remote to your project with:
+Create a repo for this project on GitHub and add that remote to your project with (replacing your-repo-URL-here with the URL of the repo you just created):
 
 ```bash
 git remote add origin your-repo-URL-here
 ```
 
-Run npm i to fetch the template's dependencies:
+Run `npm i` to fetch the template's dependencies:
 
 ```bash
 npm i
 ```
 
-touch a .env file:
+touch a `.env` file:
 
 ```bash
 touch .env
@@ -74,12 +74,18 @@ Confirm the app starts up with:
 nodemon
 ```
 
-Delete this README.md, then make an initial commit:
+Delete this `README.md`, then make an initial commit:
 
 ```bash
 git add .
 git commit -m "initial commit"
 git push origin main
+```
+
+Launch the app with:
+
+```bash
+nodemon
 ```
 
 You're done!

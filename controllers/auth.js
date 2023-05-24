@@ -3,74 +3,86 @@ const jwt = require('jsonwebtoken')
 
 async function signup(req, res) {
   try {
-    const user = await User.findOne({ where: { email: req.body.email } })
-    if (user) {
-      throw new Error('Account already exists')
-    } else if (!process.env.SECRET) {
-      throw new Error('no SECRET in .env file')
-    } else {
-      const user = await User.create(req.body)
-      req.body.userId = user.id
-      const profile = await Profile.create(req.body)
-      user.dataValues.profile = { id: profile.dataValues.id }
-      const token = createJWT(user)
-      res.status(200).json({ token })
+    if (!process.env.SECRET) throw new Error('no SECRET in back-end .env')
+    if (!process.env.CLOUDINARY_URL) {
+      throw new Error('no CLOUDINARY_URL in back-end .env file')
     }
-  } catch (error) {
-    console.log(error)
+
+    const user = await User.findOne({ where: { email: req.body.email } })
+    if (user) throw new Error('Account already exists')
+
+    const newUser = await User.create(req.body)
+    req.body.userId = newUser.id
+    const newProfile = await Profile.create(req.body)
+    newUser.dataValues.profile = { id: newProfile.dataValues.id }
+
+    const token = createJWT(user)
+    res.status(200).json({ token })
+  } catch (err) {
+    console.log(err)
     try {
       if (req.body.userId) {
         await User.destroy({ where: { id: req.body.userId } })
       }
-    } catch (error) {
-      return res.status(500).json({ err: error.message })
+    } catch (err) {
+      return res.status(500).json({ err: err.message })
     }
-    res.status(500).json({ err: error.message })
+    res.status(500).json({ err: err.message })
   }
 }
 
 async function login(req, res) {
   try {
+    if (!process.env.SECRET) throw new Error('no SECRET in back-end .env')
+    if (!process.env.CLOUDINARY_URL) {
+      throw new Error('no CLOUDINARY_URL in back-end .env file')
+    }
+
     const user = await User.findOne({
       where: { email: req.body.email },
       include: { model: Profile, as: 'profile', attributes: ['id'] },
     })
-    if (!user) return res.status(401).json({ err: 'User not found' })
-    user.comparePassword(req.body.password, (err, isMatch) => {
-      if (isMatch) {
-        const token = createJWT(user)
-        res.json({ token })
-      } else {
-        res.status(401).json({ err: 'Incorrect password' })
-      }
-    })
+    if (!user) throw new Error('User not found')
+
+    const isMatch = await user.comparePassword(req.body.password)
+    if (!isMatch) throw new Error('Incorrect password')
+
+    const token = createJWT(user)
+    res.json({ token })
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ err: error })
+    handleAuthError(err, res)
   }
 }
 
 async function changePassword(req, res) {
   try {
     const user = await User.findByPk(req.user.id)
-    if (!user) return res.status(401).json({ err: 'User not found' })
-    user.comparePassword(req.body.oldPassword, async (err, isMatch) => {
-      if (isMatch) {
-        user.password = req.body.newPassword
-        await user.save()
-        const token = createJWT(user)
-        res.json({ token })
-      } else {
-        res.status(401).json({ err: 'Incorrect password' })
-      }
-    })
+    if (!user) throw new Error('User not found')
+
+    const isMatch = user.comparePassword(req.body.password)
+    if (!isMatch) throw new Error('Incorrect password')
+
+    user.password = req.body.newPassword
+    await user.save()
+
+    const token = createJWT(user)
+    res.json({ token })
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ err: error })
+    handleAuthError(err, res)
   }
 }
 
 // /* --== Helper Functions ==-- */
+
+function handleAuthError(err, res) {
+  console.log(err)
+  const { message } = err
+  if (message === 'User not found' || message === 'Incorrect password') {
+    res.status(401).json({ err: message })
+  } else {
+    res.status(500).json({ err: message })
+  }
+}
 
 function createJWT(user) {
   return jwt.sign({ user }, process.env.SECRET, { expiresIn: '24h' })
