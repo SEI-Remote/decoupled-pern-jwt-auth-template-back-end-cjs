@@ -56,10 +56,11 @@ async function login(req, res) {
 
 async function changePassword(req, res) {
   try {
+    console.log(req.body);
     const user = await User.findByPk(req.user.id)
     if (!user) throw new Error('User not found')
 
-    const isMatch = user.comparePassword(req.body.password)
+    const isMatch = user.comparePassword(req.body.curPassword)
     if (!isMatch) throw new Error('Incorrect password')
 
     user.password = req.body.newPassword
