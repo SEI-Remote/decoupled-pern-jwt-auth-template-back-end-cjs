@@ -16,7 +16,7 @@ async function signup(req, res) {
     const newProfile = await Profile.create(req.body)
     newUser.dataValues.profile = { id: newProfile.dataValues.id }
 
-    const token = createJWT(user)
+    const token = createJWT(newUser)
     res.status(200).json({ token })
   } catch (err) {
     console.log(err)
@@ -49,7 +49,7 @@ async function login(req, res) {
 
     const token = createJWT(user)
     res.json({ token })
-  } catch (error) {
+  } catch (err) {
     handleAuthError(err, res)
   }
 }
@@ -67,7 +67,7 @@ async function changePassword(req, res) {
 
     const token = createJWT(user)
     res.json({ token })
-  } catch (error) {
+  } catch (err) {
     handleAuthError(err, res)
   }
 }
@@ -85,6 +85,7 @@ function handleAuthError(err, res) {
 }
 
 function createJWT(user) {
+  console.log(user);
   return jwt.sign({ user }, process.env.SECRET, { expiresIn: '24h' })
 }
 
