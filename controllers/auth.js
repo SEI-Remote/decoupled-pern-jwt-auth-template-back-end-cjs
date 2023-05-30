@@ -85,7 +85,6 @@ function handleAuthError(err, res) {
 }
 
 function createJWT(user) {
-  console.log(user);
   return jwt.sign({ user }, process.env.SECRET, { expiresIn: '24h' })
 }
 
