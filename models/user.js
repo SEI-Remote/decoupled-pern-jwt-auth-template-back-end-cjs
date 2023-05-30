@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     async comparePassword(tryPassword) {
-      console.log(this.dataValues.password, "dv pass");
-      console.log(tryPassword, "try pass");
       return await bcrypt.compare(tryPassword, this.dataValues.password)
     }
   }
